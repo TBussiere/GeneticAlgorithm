@@ -1,4 +1,5 @@
 import pybullet as p
+import numpy as np
 import time
 import random
 
@@ -8,7 +9,7 @@ p.connect(p.GUI)
 p.createCollisionShape(p.GEOM_PLANE)
 p.createMultiBody(0, 0)
 # met une seed au rng
-random.seed(time.time)
+random.seed(10)
 # Defini le nombre d'objet pour la "RandomShape"
 nbobj = 5
 
@@ -19,7 +20,7 @@ mass = 1
 # defini une rotation de base
 ratation = [0, 0, 0, 1]
 # defini une position de base
-pos1 = [10*rad, 10*rad, 10*rad]
+pos1 = [0, 0, 2]
 # créé la sphere qui sera le point centrale de la "Shape"
 body = p.createCollisionShape(p.GEOM_SPHERE, radius=rad*4)
 
@@ -57,34 +58,54 @@ joinAxis = []
 
 for i in range(0, nbobj):
 
-    print("-----------------------")
-    print(i)
-
-    rng =0# random.randint(0, 1)
+    rng = random.randint(0, 1)
+    print("RNG============================")
+    print(rng)
 
     if rng == 1:
         test1 = rad * random.randint(1,5)
         test2 = rad * random.randint(1,5)
         test3 = rad * random.randint(1,5)
+        print("taille carré============================")
+        print(test1,test2,test3)
         linkColind.append(p.createCollisionShape(
             p.GEOM_BOX, halfExtents=[test1, test2, test3]))
     else:
         test = rad * random.randint(1,5)
+        print("radius============================")
+        print(test)
         linkColind.append(p.createCollisionShape(
             p.GEOM_SPHERE, radius=test))
 
     linkMass.append(mass)
-    linkpos.append([random.randint(0, 100)/250,
-                    random.randint(0, 100)/258, random.randint(0, 100)/250])
+    tempx = random.randint(1, 100)/250
+    tempy = random.randint(1, 100)/250
+    tempz = random.randint(1, 100)/250
+    print("POS============================")
+    print(tempx,tempy,tempz)
+    linkpos.append([tempx,tempy,tempz])
     linkRotate.append([0, 0, 0, 1])
     idk1.append([0, 0, 0])
     idk2.append([0, 0, 0, 1])
     vShapeInd.append(-1)
-    linkInd.append(random.randint(0, i))
+    ind = random.randint(0, i)
+    print("IndLInK============================")
+    print(ind)
+    linkInd.append(ind)
     joinType.append(p.JOINT_REVOLUTE)
-
+    
+    axis1 = random.randint(0, 1)
+    axis2 = random.randint(0, 1)
+    axis3 = random.randint(0, 1)
+    if axis1 == 0 and axis2 == 0 and axis3==0:
+        while axis1 == 0 and axis2 == 0 and axis3==0:
+            axis1 = random.randint(0, 1)
+            axis2 = random.randint(0, 1)
+            axis3 = random.randint(0, 1)
+    print("axis============================")
+    print(axis1,axis2,axis3)
     joinAxis.append(
-        [random.randint(0, 1), random.randint(0, 1), random.randint(0, 1)])
+        [axis1, axis2, axis3])
 
 # ==========================================================
 # Creation du Multi Body Aka Le truc qui devra bouger
@@ -102,6 +123,9 @@ shape = p.createMultiBody(body, mass, -1, pos1, ratation,
                           linkInertialFrameOrientations=idk2
                           )
 
+if shape == -1:
+    print("ERROR BUILDING SHAPE !!!")
+    p.disconnect()
 
 # ==========================================================
 # Truc lié a la simulation
@@ -109,18 +133,39 @@ shape = p.createMultiBody(body, mass, -1, pos1, ratation,
 
 
 for i in range(0,nbobj):
-   p.setJointMotorControl2(bodyUniqueId=shape,jointIndex=i,controlMode=p.VELOCITY_CONTROL,targetVelocity=random.randint(0,5))
+   p.setJointMotorControl2(bodyUniqueId=shape,jointIndex=i,controlMode=p.VELOCITY_CONTROL,targetVelocity=random.randint(0,3))
 
 
 
 # met la gravité
-p.setGravity(0, 0, -0.01)
+p.setGravity(0, 0, -10)
 # enleve la pause
 p.setRealTimeSimulation(1)
+
+basex = pos1[0]
+basey = pos1[1]
+basez = pos1[2]
+
+maxFit = 0
+
 # Le "run"
 while (1):
-    keys = p.getKeyboardEvents()
-    time.sleep(1.2)
+    #keys = p.getKeyboardEvents()
+
+    posbody = p.getBasePositionAndOrientation(body)[0]
+
+    curx = posbody[0]
+    cury = posbody[1]
+    curz = posbody[2]
+
+    fitness = (np.abs(curx-basex) + np.abs(curx-basex) + np.abs(curx-basex))
+
+    if maxFit < fitness:
+        maxFit = fitness
+
+    #print(maxFit)
+
+    time.sleep(2)
 
 
 p.disconnect()
