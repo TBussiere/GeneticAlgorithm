@@ -21,7 +21,7 @@ ratation = [0, 0, 0, 1]
 # defini une position de base
 pos1 = [10*rad, 10*rad, 10*rad]
 # créé la sphere qui sera le point centrale de la "Shape"
-body = p.createCollisionShape(p.GEOM_SPHERE, radius=rad)
+body = p.createCollisionShape(p.GEOM_SPHERE, radius=rad*4)
 
 # ==========================================================
 # Creation des matrices pour link les autres shapes au body
@@ -60,33 +60,31 @@ for i in range(0, nbobj):
     print("-----------------------")
     print(i)
 
-    rng = random.randint(0, 1)
+    rng =0# random.randint(0, 1)
 
     if rng == 1:
+        test1 = rad * random.randint(1,5)
+        test2 = rad * random.randint(1,5)
+        test3 = rad * random.randint(1,5)
         linkColind.append(p.createCollisionShape(
-            p.GEOM_BOX, halfExtents=[rad, rad, rad]))
+            p.GEOM_BOX, halfExtents=[test1, test2, test3]))
     else:
+        test = rad * random.randint(1,5)
         linkColind.append(p.createCollisionShape(
-            p.GEOM_SPHERE, radius=rad))
+            p.GEOM_SPHERE, radius=test))
 
     linkMass.append(mass)
-    linkpos.append([random.randint(0, 100)/100,
-                    random.randint(0, 100)/100, random.randint(0, 100)/100])
+    linkpos.append([random.randint(0, 100)/250,
+                    random.randint(0, 100)/258, random.randint(0, 100)/250])
     linkRotate.append([0, 0, 0, 1])
     idk1.append([0, 0, 0])
     idk2.append([0, 0, 0, 1])
     vShapeInd.append(-1)
     linkInd.append(random.randint(0, i))
-
-    rng = random.randint(0, 1)
-    if rng == 1:
-        joinType.append(p.JOINT_PRISMATIC)
-    else:
-        joinType.append(p.JOINT_REVOLUTE)
+    joinType.append(p.JOINT_REVOLUTE)
 
     joinAxis.append(
         [random.randint(0, 1), random.randint(0, 1), random.randint(0, 1)])
-
 
 # ==========================================================
 # Creation du Multi Body Aka Le truc qui devra bouger
@@ -109,11 +107,20 @@ shape = p.createMultiBody(body, mass, -1, pos1, ratation,
 # Truc lié a la simulation
 # ==========================================================
 
+
+for i in range(0,nbobj):
+   p.setJointMotorControl2(bodyUniqueId=shape,jointIndex=i,controlMode=p.VELOCITY_CONTROL,targetVelocity=random.randint(0,5))
+
+
+
 # met la gravité
-p.setGravity(0, 0, -7)
+p.setGravity(0, 0, -0.01)
 # enleve la pause
 p.setRealTimeSimulation(1)
 # Le "run"
 while (1):
     keys = p.getKeyboardEvents()
-    time.sleep(0.5)
+    time.sleep(1.2)
+
+
+p.disconnect()
