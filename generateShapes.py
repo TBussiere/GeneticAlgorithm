@@ -9,7 +9,7 @@ p.connect(p.GUI)
 p.createCollisionShape(p.GEOM_PLANE)
 p.createMultiBody(0, 0)
 # met une seed au rng
-random.seed(10)
+random.seed(time.time())
 # Defini le nombre d'objet pour la "RandomShape"
 nbobj = 5
 
@@ -59,21 +59,15 @@ joinAxis = []
 for i in range(0, nbobj):
 
     rng = random.randint(0, 1)
-    print("RNG============================")
-    print(rng)
 
     if rng == 1:
         test1 = rad * random.randint(1,5)
         test2 = rad * random.randint(1,5)
         test3 = rad * random.randint(1,5)
-        print("taille carré============================")
-        print(test1,test2,test3)
         linkColind.append(p.createCollisionShape(
             p.GEOM_BOX, halfExtents=[test1, test2, test3]))
     else:
         test = rad * random.randint(1,5)
-        print("radius============================")
-        print(test)
         linkColind.append(p.createCollisionShape(
             p.GEOM_SPHERE, radius=test))
 
@@ -81,16 +75,12 @@ for i in range(0, nbobj):
     tempx = random.randint(1, 100)/250
     tempy = random.randint(1, 100)/250
     tempz = random.randint(1, 100)/250
-    print("POS============================")
-    print(tempx,tempy,tempz)
     linkpos.append([tempx,tempy,tempz])
     linkRotate.append([0, 0, 0, 1])
     idk1.append([0, 0, 0])
     idk2.append([0, 0, 0, 1])
     vShapeInd.append(-1)
     ind = random.randint(0, i)
-    print("IndLInK============================")
-    print(ind)
     linkInd.append(ind)
     joinType.append(p.JOINT_REVOLUTE)
     
@@ -102,8 +92,6 @@ for i in range(0, nbobj):
             axis1 = random.randint(0, 1)
             axis2 = random.randint(0, 1)
             axis3 = random.randint(0, 1)
-    print("axis============================")
-    print(axis1,axis2,axis3)
     joinAxis.append(
         [axis1, axis2, axis3])
 
@@ -148,24 +136,29 @@ basez = pos1[2]
 
 maxFit = 0
 
+cyaw=10
+cpitch=-15
+cdist=5
+
 # Le "run"
 while (1):
     #keys = p.getKeyboardEvents()
 
     posbody = p.getBasePositionAndOrientation(body)[0]
+    p.resetDebugVisualizerCamera( cameraDistance=cdist, cameraYaw=cyaw, cameraPitch=cpitch, cameraTargetPosition=posbody)
 
     curx = posbody[0]
     cury = posbody[1]
     curz = posbody[2]
 
-    fitness = (np.abs(curx-basex) + np.abs(curx-basex) + np.abs(curx-basex))
+    fitness = (np.abs(curx-basex) + np.abs(cury-basey))
 
     if maxFit < fitness:
         maxFit = fitness
 
     #print(maxFit)
 
-    time.sleep(2)
+    time.sleep(1/65)
 
 
 p.disconnect()
