@@ -1,4 +1,5 @@
 import pybullet as p
+import random
 
 
 class Shape:
@@ -30,7 +31,7 @@ class Shape:
 
     shapeId = -1
 
-    def __init__(self, body, mass=1, pos=[0, 0, 0], rota=[0, 0, 0, 1]):
+    def __init__(self, body, pos=[0, 0, 0], mass=1, rota=[0, 0, 0, 1]):
         self.baseMass = mass
         self.body = body
         self.basePos = pos
@@ -51,22 +52,57 @@ class Shape:
 
         self.nbobj = self.nbobj + 1
 
-    def createBody(self, mass, colInd, pos, linkind, joinAxis):
+    def createBody(self):
 
-        res = p.createMultiBody(self.body, mass, -1, self.basePos,
+        res = p.createMultiBody(self.body, self.baseMass, -1, self.basePos,
                                 self.baseRota,
                                 linkMasses=self.linkMass,
                                 linkCollisionShapeIndices=self.linkColind,
                                 linkPositions=self.linkpos,
                                 linkOrientations=self.linkRotate,
                                 linkParentIndices=self.linkInd,
-                                linkJointTypes=self.self.joinType,
+                                linkJointTypes=self.joinType,
                                 linkJointAxis=self.joinAxis,
                                 linkVisualShapeIndices=self.vShapeInd,
                                 linkInertialFramePositions=self.idk1,
                                 linkInertialFrameOrientations=self.idk2
                                 )
         return res
+
+    def createRandom(self, nbobj, echelle):
+
+        for i in range(0, nbobj):
+            rng = random.randint(0, 1)
+            # cs
+            if rng == 1:
+                test1 = echelle * random.randint(1, 5)
+                test2 = echelle * random.randint(1, 5)
+                test3 = echelle * random.randint(1, 5)
+                cs = p.createCollisionShape(
+                    p.GEOM_BOX, halfExtents=[test1, test2, test3])
+            else:
+                test = echelle * random.randint(1, 5)
+                cs = p.createCollisionShape(p.GEOM_SPHERE, radius=test)
+
+            # [tempx, tempy, tempz]
+            tempx = random.randint(1, 100)/250
+            tempy = random.randint(1, 100)/250
+            tempz = random.randint(1, 100)/250
+
+            # ind
+            ind = random.randint(0, i)
+
+            # [axis1,axis2,axis3]
+            axis1 = random.randint(0, 1)
+            axis2 = random.randint(0, 1)
+            axis3 = random.randint(0, 1)
+            if axis1 == 0 and axis2 == 0 and axis3 == 0:
+                while axis1 == 0 and axis2 == 0 and axis3 == 0:
+                    axis1 = random.randint(0, 1)
+                    axis2 = random.randint(0, 1)
+                    axis3 = random.randint(0, 1)
+            self.addLink(self.baseMass, cs, [tempx, tempy, tempz], ind, [
+                axis1, axis2, axis3])
 
     """
     Faire Mutate
