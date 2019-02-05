@@ -27,15 +27,28 @@ p.configureDebugVisualizer(p.COV_ENABLE_GUI, 0)
 
 maxFit = 0
 
+# met la simulation en mode real time
+p.setRealTimeSimulation(1)
+fastForward = False
+p.setPhysicsEngineParameter(maxNumCmdPer1ms=1000)
+
 # Le "run"
 while (1):
     rkey = ord('r')
+    fkey = ord('f')
     keys = p.getKeyboardEvents()
     if rkey in keys and keys[rkey] & p.KEY_WAS_TRIGGERED:
         p.resetSimulation()
         shape = util.initSim(nbobj, rad, pos1)
         maxFit = 0
         continue
+    elif fkey in keys and keys[fkey] & p.KEY_WAS_TRIGGERED:
+        if fastForward:
+            fastForward = False
+            p.setRealTimeSimulation(1)
+        else:
+            fastForward = True
+            p.setRealTimeSimulation(0)
 
     posbody = p.getBasePositionAndOrientation(shape)[0]
     curCam = p.getDebugVisualizerCamera()
@@ -54,7 +67,10 @@ while (1):
         maxFit = fitness
         print(maxFit)
 
-    time.sleep(1/65)
+    if fastForward:
+        p.stepSimulation()
+    else:
+        time.sleep(1/60)
 
 
 p.disconnect()

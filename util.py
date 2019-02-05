@@ -40,7 +40,5 @@ def initSim(nbobj, rad, pos1):
 
     # met la gravité
     p.setGravity(0, 0, -10)
-    # enleve la pause
-    p.setRealTimeSimulation(1)
 
     return shape
