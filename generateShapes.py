@@ -1,19 +1,14 @@
 import pybullet as p
 import numpy as np
 import time
-import random
-import Shape as s
+# import Shape as s
+import util
+
 
 # créé la fenetre de base
 p.connect(p.GUI)
-# créé le sol
-p.createCollisionShape(p.GEOM_PLANE)
-p.createMultiBody(0, 0)
-# met une seed au rng
-random.seed(time.time())
 # Defini le nombre d'objet pour la "RandomShape"
 nbobj = 5
-
 # defini un radius de base
 rad = 0.05
 # defini une mass de base
@@ -22,47 +17,13 @@ mass = 1
 rotation = [0, 0, 0, 1]
 # defini une position de base
 pos1 = [0, 0, 2]
-# créé la sphere qui sera le point centrale de la "Shape"
-body = p.createCollisionShape(p.GEOM_SPHERE, radius=rad*4)
-
-aShape = s.Shape(body, pos1)
-
-# ==========================================================
-# Generation des nouvelles shapes
-# ==========================================================
-aShape.createRandom(nbobj, rad)
-
-
-# ==========================================================
-# Creation du Multi Body Aka Le truc qui bouge
-# ==========================================================
-shape = aShape.createBody()
-
-if shape == -1:
-    print("ERROR BUILDING SHAPE !!!")
-    p.disconnect()
-
-# ==========================================================
-# Truc lié a la simulation
-# ==========================================================
-
-
-for i in range(0, nbobj):
-    p.setJointMotorControl2(bodyUniqueId=shape, jointIndex=i,
-                            controlMode=p.VELOCITY_CONTROL,
-                            targetVelocity=random.randint(0, 3))
-
-
-# met la gravité
-p.setGravity(0, 0, -10)
-# enleve la pause
-p.setRealTimeSimulation(1)
-
-p.configureDebugVisualizer(p.COV_ENABLE_GUI, 0)
-
 basex = pos1[0]
 basey = pos1[1]
 basez = pos1[2]
+
+shape = util.initSim(nbobj, rad, pos1)
+
+p.configureDebugVisualizer(p.COV_ENABLE_GUI, 0)
 
 maxFit = 0
 
@@ -72,9 +33,15 @@ cdist = 5
 
 # Le "run"
 while (1):
-    # keys = p.getKeyboardEvents()
+    rkey = ord('r')
+    keys = p.getKeyboardEvents()
+    if rkey in keys and keys[rkey] & p.KEY_WAS_TRIGGERED:
+        p.resetSimulation()
+        shape = util.initSim(nbobj, rad, pos1)
+        maxFit = 0
+        continue
 
-    posbody = p.getBasePositionAndOrientation(body)[0]
+    posbody = p.getBasePositionAndOrientation(shape)[0]
     p.resetDebugVisualizerCamera(
         cameraDistance=cdist, cameraYaw=cyaw, cameraPitch=cpitch,
         cameraTargetPosition=posbody)

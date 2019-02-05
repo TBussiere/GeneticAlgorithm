@@ -31,11 +31,23 @@ class Shape:
 
     shapeId = -1
 
-    def __init__(self, body, pos=[0, 0, 0], mass=1, rota=[0, 0, 0, 1]):
+    def __init__(self, body=None, pos=[0, 0, 0], mass=1, rota=[0, 0, 0, 1]):
         self.baseMass = mass
         self.body = body
         self.basePos = pos
         self.baseRota = rota
+        self.nbobj = 0
+
+        self.linkMass = []
+        self.linkColind = []
+        self.linkpos = []
+        self.linkInd = []
+        self.joinAxis = []
+        self.linkRotate = []
+        self.idk1 = []
+        self.idk2 = []
+        self.vShapeInd = []
+        self.joinType = []
 
     def addLink(self, mass, colInd, pos, linkind, joinAxis):
         self.linkMass.append(mass)
