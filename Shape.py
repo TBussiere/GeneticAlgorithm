@@ -111,7 +111,7 @@ class Shape:
         pass
 
     """
-    Faire Mutate
+    Faire crossOver
     """
     def crossOver(other):
         pass

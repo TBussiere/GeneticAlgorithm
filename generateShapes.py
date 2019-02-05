@@ -34,7 +34,7 @@ aShape.createRandom(nbobj, rad)
 
 
 # ==========================================================
-# Creation du Multi Body Aka Le truc qui devra bouger
+# Creation du Multi Body Aka Le truc qui bouge
 # ==========================================================
 shape = aShape.createBody()
 
