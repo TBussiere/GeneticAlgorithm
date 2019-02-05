@@ -18,7 +18,7 @@ rad = 0.05
 # defini une mass de base
 mass = 1
 # defini une rotation de base
-ratation = [0, 0, 0, 1]
+rotation = [0, 0, 0, 1]
 # defini une position de base
 pos1 = [0, 0, 2]
 # créé la sphere qui sera le point centrale de la "Shape"
@@ -61,13 +61,13 @@ for i in range(0, nbobj):
     rng = random.randint(0, 1)
 
     if rng == 1:
-        test1 = rad * random.randint(1,5)
-        test2 = rad * random.randint(1,5)
-        test3 = rad * random.randint(1,5)
+        test1 = rad * random.randint(1, 5)
+        test2 = rad * random.randint(1, 5)
+        test3 = rad * random.randint(1, 5)
         linkColind.append(p.createCollisionShape(
             p.GEOM_BOX, halfExtents=[test1, test2, test3]))
     else:
-        test = rad * random.randint(1,5)
+        test = rad * random.randint(1, 5)
         linkColind.append(p.createCollisionShape(
             p.GEOM_SPHERE, radius=test))
 
@@ -75,7 +75,7 @@ for i in range(0, nbobj):
     tempx = random.randint(1, 100)/250
     tempy = random.randint(1, 100)/250
     tempz = random.randint(1, 100)/250
-    linkpos.append([tempx,tempy,tempz])
+    linkpos.append([tempx, tempy, tempz])
     linkRotate.append([0, 0, 0, 1])
     idk1.append([0, 0, 0])
     idk2.append([0, 0, 0, 1])
@@ -83,12 +83,12 @@ for i in range(0, nbobj):
     ind = random.randint(0, i)
     linkInd.append(ind)
     joinType.append(p.JOINT_REVOLUTE)
-    
+
     axis1 = random.randint(0, 1)
     axis2 = random.randint(0, 1)
     axis3 = random.randint(0, 1)
-    if axis1 == 0 and axis2 == 0 and axis3==0:
-        while axis1 == 0 and axis2 == 0 and axis3==0:
+    if axis1 == 0 and axis2 == 0 and axis3 == 0:
+        while axis1 == 0 and axis2 == 0 and axis3 == 0:
             axis1 = random.randint(0, 1)
             axis2 = random.randint(0, 1)
             axis3 = random.randint(0, 1)
@@ -98,7 +98,7 @@ for i in range(0, nbobj):
 # ==========================================================
 # Creation du Multi Body Aka Le truc qui devra bouger
 # ==========================================================
-shape = p.createMultiBody(body, mass, -1, pos1, ratation,
+shape = p.createMultiBody(body, mass, -1, pos1, rotation,
                           linkMasses=linkMass,
                           linkCollisionShapeIndices=linkColind,
                           linkPositions=linkpos,
@@ -120,9 +120,10 @@ if shape == -1:
 # ==========================================================
 
 
-for i in range(0,nbobj):
-   p.setJointMotorControl2(bodyUniqueId=shape,jointIndex=i,controlMode=p.VELOCITY_CONTROL,targetVelocity=random.randint(0,3))
-
+for i in range(0, nbobj):
+    p.setJointMotorControl2(bodyUniqueId=shape, jointIndex=i,
+                            controlMode=p.VELOCITY_CONTROL,
+                            targetVelocity=random.randint(0, 3))
 
 
 # met la gravité
@@ -136,16 +137,18 @@ basez = pos1[2]
 
 maxFit = 0
 
-cyaw=10
-cpitch=-15
-cdist=5
+cyaw = 10
+cpitch = -15
+cdist = 5
 
 # Le "run"
 while (1):
-    #keys = p.getKeyboardEvents()
+    # keys = p.getKeyboardEvents()
 
     posbody = p.getBasePositionAndOrientation(body)[0]
-    p.resetDebugVisualizerCamera( cameraDistance=cdist, cameraYaw=cyaw, cameraPitch=cpitch, cameraTargetPosition=posbody)
+    p.resetDebugVisualizerCamera(
+        cameraDistance=cdist, cameraYaw=cyaw, cameraPitch=cpitch,
+        cameraTargetPosition=posbody)
 
     curx = posbody[0]
     cury = posbody[1]
@@ -156,7 +159,7 @@ while (1):
     if maxFit < fitness:
         maxFit = fitness
 
-    #print(maxFit)
+    # print(maxFit)
 
     time.sleep(1/65)
 
