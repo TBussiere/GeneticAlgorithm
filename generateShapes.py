@@ -27,10 +27,6 @@ p.configureDebugVisualizer(p.COV_ENABLE_GUI, 0)
 
 maxFit = 0
 
-cyaw = 10
-cpitch = -15
-cdist = 5
-
 # Le "run"
 while (1):
     rkey = ord('r')
@@ -42,8 +38,10 @@ while (1):
         continue
 
     posbody = p.getBasePositionAndOrientation(shape)[0]
+    curCam = p.getDebugVisualizerCamera()
     p.resetDebugVisualizerCamera(
-        cameraDistance=cdist, cameraYaw=cyaw, cameraPitch=cpitch,
+        cameraDistance=curCam[10], cameraYaw=curCam[8],
+        cameraPitch=curCam[9],
         cameraTargetPosition=posbody)
 
     curx = posbody[0]
@@ -54,8 +52,7 @@ while (1):
 
     if maxFit < fitness:
         maxFit = fitness
-
-    # print(maxFit)
+        print(maxFit)
 
     time.sleep(1/65)
 
