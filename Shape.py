@@ -119,11 +119,11 @@ class Shape:
     """
     Faire Mutate
     """
-    def mutate():
+    def mutate(self):
         pass
 
     """
     Faire crossOver
     """
-    def crossOver(other):
+    def crossOver(self,other):
         pass

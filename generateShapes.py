@@ -24,7 +24,6 @@ basez = pos1[2]
 shape = util.initSim(nbobj, rad, pos1)
 
 p.configureDebugVisualizer(p.COV_ENABLE_GUI, 0)
-
 maxFit = 0
 
 # met la simulation en mode real time
@@ -69,8 +68,6 @@ while (1):
 
     if fastForward:
         p.stepSimulation()
+        # time.sleep(1/1000)
     else:
         time.sleep(1/60)
-
-
-p.disconnect()

@@ -10,6 +10,7 @@ def initSim(nbobj, rad, pos1):
     p.createMultiBody(0, 0)
     # met une seed au rng
     random.seed(time.time())
+    # random.seed("Thibault")
     # créé la sphere qui sera le point centrale de la "Shape"
     body = p.createCollisionShape(p.GEOM_SPHERE, radius=rad*4)
 
