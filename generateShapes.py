@@ -21,6 +21,7 @@ basex = pos1[0]
 basey = pos1[1]
 basez = pos1[2]
 
+# shape est un tab
 shape = util.initSim(nbobj, rad, pos1)
 
 p.configureDebugVisualizer(p.COV_ENABLE_GUI, 0)
@@ -38,7 +39,9 @@ while (1):
     keys = p.getKeyboardEvents()
     if rkey in keys and keys[rkey] & p.KEY_WAS_TRIGGERED:
         p.resetSimulation()
+        p.setRealTimeSimulation(0)
         shape = util.initSim(nbobj, rad, pos1)
+        p.setRealTimeSimulation(1)
         maxFit = 0
         continue
     elif fkey in keys and keys[fkey] & p.KEY_WAS_TRIGGERED:
@@ -49,7 +52,7 @@ while (1):
             fastForward = True
             p.setRealTimeSimulation(0)
 
-    posbody = p.getBasePositionAndOrientation(shape)[0]
+    posbody = p.getBasePositionAndOrientation(shape[0].getId())[0]
     curCam = p.getDebugVisualizerCamera()
     p.resetDebugVisualizerCamera(
         cameraDistance=curCam[10], cameraYaw=curCam[8],
@@ -64,7 +67,7 @@ while (1):
 
     if maxFit < fitness:
         maxFit = fitness
-        print(maxFit)
+        # print(maxFit)
 
     if fastForward:
         p.stepSimulation()

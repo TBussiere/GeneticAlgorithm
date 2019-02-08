@@ -115,6 +115,11 @@ class Shape:
                     axis3 = random.randint(0, 1)
             self.addLink(self.baseMass, cs, [tempx, tempy, tempz], ind, [
                 axis1, axis2, axis3])
+    
+    def setId(self,id):
+        self.shapeId = id
+    def getId(self):
+        return self.shapeId
 
     """
     Faire Mutate

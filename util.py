@@ -7,39 +7,40 @@ import Shape as s
 def initSim(nbobj, rad, pos1):
     # créé le sol
     p.createCollisionShape(p.GEOM_PLANE)
-    p.createMultiBody(0, 0)
+    basePlane = p.createMultiBody(0, 0)
     # met une seed au rng
     random.seed(time.time())
     # random.seed("Thibault")
     # créé la sphere qui sera le point centrale de la "Shape"
-    body = p.createCollisionShape(p.GEOM_SPHERE, radius=rad*4)
+    nbPop = 10
+    pop = []
+    for i in range(0,nbPop-1):
+        body = p.createCollisionShape(p.GEOM_SPHERE, radius=rad*4)
+        temp = s.Shape(body, pos1)
+        temp.createRandom(nbobj, rad)
+        idtmp = temp.createBody()
+        pop.append(temp)
 
-    aShape = s.Shape(body, pos1)
+        pop[i].setId(idtmp)
+    
+    for elem1 in range(0,nbPop-1):
+        for elem2 in range(elem1+1,nbPop-1):
+            for i in range(-1,nbobj):
+                for j in range(-1,nbobj):
+                    p.setCollisionFilterPair(pop[elem1].getId(), pop[elem2].getId(), i,j, 0)
 
-    # ==========================================================
-    # Generation des nouvelles shapes
-    # ==========================================================
-    aShape.createRandom(nbobj, rad)
-
-    # ==========================================================
-    # Creation du Multi Body Aka Le truc qui bouge
-    # ==========================================================
-    shape = aShape.createBody()
-
-    if shape == -1:
-        print("ERROR BUILDING SHAPE !!!")
-        p.disconnect()
-
+    
     # ==========================================================
     # Truc lié a la simulation
     # ==========================================================
-
-    for i in range(0, nbobj):
-        p.setJointMotorControl2(bodyUniqueId=shape, jointIndex=i,
-                                controlMode=p.VELOCITY_CONTROL,
-                                targetVelocity=random.randint(0, 3))
+    for elem in pop:
+        for i in range(0, nbobj):
+            p.setJointMotorControl2(bodyUniqueId=elem.getId(), jointIndex=i,
+                                    controlMode=p.VELOCITY_CONTROL,
+                                    targetVelocity=random.randint(0, 3))
+                                
 
     # met la gravité
-    p.setGravity(0, 0, -10)
+    p.setGravity(0, 0, -9.81)
 
-    return shape
+    return pop
