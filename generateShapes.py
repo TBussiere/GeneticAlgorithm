@@ -55,12 +55,10 @@ while (1):
     elif nkey in keys and keys[nkey] & p.KEY_WAS_TRIGGERED:
         p.resetSimulation()
         p.setRealTimeSimulation(0)
-        shape = util.nextGen(nbobj,rad,pos1,shape)
+        shape = util.nextGen(nbobj, rad, pos1, shape)
         p.setRealTimeSimulation(1)
         maxFit = 0
         continue
-
-
 
     posbody = p.getBasePositionAndOrientation(shape[0].getId())[0]
     curCam = p.getDebugVisualizerCamera()
