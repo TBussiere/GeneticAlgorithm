@@ -1,7 +1,7 @@
 import pybullet as p
 import numpy as np
 import time
-# import Shape as s
+import Shape as s
 import util
 
 
@@ -36,6 +36,7 @@ p.setPhysicsEngineParameter(maxNumCmdPer1ms=1000)
 while (1):
     rkey = ord('r')
     fkey = ord('f')
+    nkey = ord('n')
     keys = p.getKeyboardEvents()
     if rkey in keys and keys[rkey] & p.KEY_WAS_TRIGGERED:
         p.resetSimulation()
@@ -51,6 +52,15 @@ while (1):
         else:
             fastForward = True
             p.setRealTimeSimulation(0)
+    elif nkey in keys and keys[nkey] & p.KEY_WAS_TRIGGERED:
+        p.resetSimulation()
+        p.setRealTimeSimulation(0)
+        shape = util.nextGen(nbobj,rad,pos1,shape)
+        p.setRealTimeSimulation(1)
+        maxFit = 0
+        continue
+
+
 
     posbody = p.getBasePositionAndOrientation(shape[0].getId())[0]
     curCam = p.getDebugVisualizerCamera()
