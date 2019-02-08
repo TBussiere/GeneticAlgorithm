@@ -12,7 +12,7 @@ def initSim(nbobj, rad, pos1):
     random.seed(time.time())
     # random.seed("Thibault")
     # créé la sphere qui sera le point centrale de la "Shape"
-    nbPop = 10
+    nbPop = 25
     pop = []
     for i in range(0,nbPop-1):
         body = p.createCollisionShape(p.GEOM_SPHERE, radius=rad*4)
@@ -22,13 +22,14 @@ def initSim(nbobj, rad, pos1):
         pop.append(temp)
 
         pop[i].setId(idtmp)
-    
-    for elem1 in range(0,nbPop-1):
-        for elem2 in range(elem1+1,nbPop-1):
-            for i in range(-1,nbobj):
-                for j in range(-1,nbobj):
-                    p.setCollisionFilterPair(pop[elem1].getId(), pop[elem2].getId(), i,j, 0)
 
+    
+    for i in range(-1,nbobj):
+        for j in range(-1,nbobj):
+            for elem1 in range(0,nbPop-1):
+                for elem2 in range(elem1+1,nbPop-1):
+                    p.setCollisionFilterPair(pop[elem1].getId(), pop[elem2].getId(), i,j, 0)
+        print((i+2)/(nbobj+1))
     
     # ==========================================================
     # Truc lié a la simulation

@@ -8,7 +8,7 @@ import util
 # créé la fenetre de base
 p.connect(p.GUI)
 # Defini le nombre d'objet pour la "RandomShape"
-nbobj = 5
+nbobj = 4
 # defini un radius de base
 rad = 0.05
 # defini une mass de base
